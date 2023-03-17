@@ -6,3 +6,10 @@ export async function getTrendMovies() {
    );
    return queryData;
 }
+
+export async function getMovieDetails(movie) {
+   const movieInfo = await fetch(
+      `https://api.themoviedb.org/3/movie/${movie}?api_key=${API_KEY}&language=en-US`
+   );
+   return movieInfo;
+}

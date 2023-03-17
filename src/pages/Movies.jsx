@@ -1,10 +1,9 @@
-// import { element } from 'prop-types';
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { getTrendMovies } from '../utils/fetchFunctions';
 
-export const Home = () => {
+export const Movies = () => {
    const [filmList, setFilmList] = useState([]);
 
    const imagePath = 'https://image.tmdb.org/t/p/w500/';
@@ -16,17 +15,17 @@ export const Home = () => {
             setFilmList(data.results);
          });
    }, []);
-   console.log(filmList);
+
    return (
       <>
-         <h1>Trend movies</h1>
+         <h1>This is moviePage</h1>
          <ul>
             {filmList.map(element => {
                return (
                   <li key={element.id}>
                      <img src={imagePath + element.backdrop_path} alt={element.title} />
                      <p>{element.title}</p>
-                     <NavLink to={`/movies/${element.id}`}>{element.id}</NavLink>
+                     <NavLink to={`${element.id}`}>{element.id}</NavLink>
                   </li>
                );
             })}

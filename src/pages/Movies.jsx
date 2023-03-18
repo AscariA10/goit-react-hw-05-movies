@@ -1,31 +1,50 @@
 import { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useSearchParams } from 'react-router-dom';
 
-import { getTrendMovies } from '../utils/fetchFunctions';
+import { getMovie } from '../utils/fetchFunctions';
 
 export const Movies = () => {
-   const [filmList, setFilmList] = useState([]);
+   const [query, setQuery] = useState('');
+   const [searchedMovies, setSearchedMovies] = useState([]);
+   const [searchParams, setSearchParams] = useSearchParams();
+   const name = searchParams.get('name') ?? '';
 
-   const imagePath = 'https://image.tmdb.org/t/p/w500/';
+   function onChangeHandler(event) {
+      setQuery(event.target.value);
+   }
 
    useEffect(() => {
-      getTrendMovies()
+      getMovie(name)
          .then(response => response.json())
          .then(data => {
-            setFilmList(data.results);
+            setSearchedMovies(data.results);
          });
    }, []);
+
+   function onSubmitHandler(event) {
+      event.preventDefault();
+      setSearchParams({ name: query });
+      getMovie(query)
+         .then(response => response.json())
+         .then(data => {
+            setSearchedMovies(data.results);
+         });
+   }
 
    return (
       <>
          <h1>This is moviePage</h1>
+         <form onSubmit={onSubmitHandler}>
+            <input type="text" onChange={onChangeHandler} value={query} />
+            <button type="submit">Get Movies!!!</button>
+         </form>
          <ul>
-            {filmList.map(element => {
+            {searchedMovies.map(element => {
                return (
                   <li key={element.id}>
-                     <img src={imagePath + element.backdrop_path} alt={element.title} />
-                     <p>{element.title}</p>
-                     <NavLink to={`${element.id}`}>{element.id}</NavLink>
+                     {' '}
+                     <p>{element.original_title}</p>{' '}
+                     <NavLink to={`/movies/${element.id}`}>{element.id}</NavLink>
                   </li>
                );
             })}

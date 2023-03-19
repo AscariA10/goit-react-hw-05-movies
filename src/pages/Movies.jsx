@@ -27,7 +27,7 @@ const Movies = () => {
          .then(data => {
             setSearchedMovies(data.results);
          });
-   }, []);
+   }, [movieId]);
 
    function onSubmitHandler(event) {
       event.preventDefault();

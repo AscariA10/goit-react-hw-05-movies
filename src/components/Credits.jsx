@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { getMovieCredits } from 'utils/fetchFunctions';
 
-export const Credits = () => {
+const Credits = () => {
    const [credits, setCredits] = useState({});
    const { movieId } = useParams();
 
@@ -28,3 +28,4 @@ export const Credits = () => {
       </>
    );
 };
+export default Credits;

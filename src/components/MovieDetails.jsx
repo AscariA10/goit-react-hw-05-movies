@@ -1,13 +1,18 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect, useRef, Suspense } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import { Outlet, NavLink } from 'react-router-dom';
 
 import { getMovieDetails } from 'utils/fetchFunctions';
 
-export const MovieDetails = () => {
+const MovieDetails = () => {
    const [movieDetails, setMovieDetails] = useState('');
 
    const { movieId } = useParams();
+
+   const location = useLocation();
+
+   const backRef = useRef(location.state?.from ?? '/movies');
+   console.log('ref', backRef);
 
    const imagePath = 'https://image.tmdb.org/t/p/w500/';
 
@@ -24,7 +29,7 @@ export const MovieDetails = () => {
 
    return (
       <>
-         <button type="button">Go Back</button>
+         <NavLink to={backRef.current}>Go Back</NavLink>
          <h2>
             {original_title}({release_date?.slice(0, 4)})
          </h2>
@@ -34,7 +39,10 @@ export const MovieDetails = () => {
          <p>Genres: {genres?.map(element => element.name).join(', ')}</p>
          <NavLink to="credits">To Credits</NavLink>
          <NavLink to="reviews"> To Reviews</NavLink>
-         <Outlet />
+         <Suspense fallback={<div>Loading...</div>}>
+            <Outlet />
+         </Suspense>
       </>
    );
 };
+export default MovieDetails;

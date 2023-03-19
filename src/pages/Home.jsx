@@ -1,11 +1,12 @@
 // import { element } from 'prop-types';
 import { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
 import { getTrendMovies } from '../utils/fetchFunctions';
 
-export const Home = () => {
+const Home = () => {
    const [filmList, setFilmList] = useState([]);
+   const location = useLocation();
 
    const imagePath = 'https://image.tmdb.org/t/p/w500/';
 
@@ -16,7 +17,7 @@ export const Home = () => {
             setFilmList(data.results);
          });
    }, []);
-   console.log(filmList);
+
    return (
       <>
          <h1>Trend movies</h1>
@@ -26,7 +27,9 @@ export const Home = () => {
                   <li key={element.id}>
                      <img src={imagePath + element.backdrop_path} alt={element.title} />
                      <p>{element.title}</p>
-                     <NavLink to={`/movies/${element.id}`}>{element.id}</NavLink>
+                     <NavLink to={`/movies/${element.id}`} state={{ from: location }}>
+                        {element.id}
+                     </NavLink>
                   </li>
                );
             })}
@@ -34,3 +37,5 @@ export const Home = () => {
       </>
    );
 };
+
+export default Home;

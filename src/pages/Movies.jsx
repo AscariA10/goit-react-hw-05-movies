@@ -5,16 +5,18 @@ import { getMovie } from '../utils/fetchFunctions';
 
 const Movies = () => {
    const [searchedMovies, setSearchedMovies] = useState([]);
+   const [query, setQuery] = useState('');
    const [searchParams, setSearchParams] = useSearchParams();
    const movieId = searchParams.get('movieId') ?? '';
 
    const location = useLocation();
 
    const updateQueryString = event => {
+      setQuery(event.target.value);
       if (event.target.value === '') {
          return setSearchParams({});
       }
-      setSearchParams({ movieId: event.target.value });
+      // setSearchParams({ movieId: event.target.value });
    };
 
    // function onChangeHandler(event) {
@@ -31,18 +33,19 @@ const Movies = () => {
 
    function onSubmitHandler(event) {
       event.preventDefault();
-      getMovie(movieId)
-         .then(response => response.json())
-         .then(data => {
-            setSearchedMovies(data.results);
-         });
+      setSearchParams({ movieId: query });
+      // getMovie(movieId)
+      //    .then(response => response.json())
+      //    .then(data => {
+      //       setSearchedMovies(data.results);
+      //    });
    }
 
    return (
       <>
          <h1>This is moviePage</h1>
          <form onSubmit={onSubmitHandler}>
-            <input type="text" onChange={updateQueryString} value={movieId} />
+            <input type="text" onChange={updateQueryString} value={query} />
             <button type="submit">Get Movies!!!</button>
          </form>
          <ul>
